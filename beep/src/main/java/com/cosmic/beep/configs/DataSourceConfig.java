@@ -1,19 +1,19 @@
 package com.cosmic.beep.configs;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.datasource")
-public class DataSourceConfig  extends HikariConfig{
+public class DataSourceConfig {
 
     @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
-        return new HikariDataSource(this);
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 }
