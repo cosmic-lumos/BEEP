@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MARIADB_USER: beepdb
+      MARIADB_PASSWORD: beepbeep
+      MARIADB_DATABASE: beep
+      MARIADB_ROOT_PASSWORD: secretbeep
+    volumes:
+      - mariadb-database:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mariadb-database:
