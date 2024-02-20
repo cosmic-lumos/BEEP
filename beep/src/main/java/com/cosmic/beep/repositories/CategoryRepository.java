@@ -1,7 +1,7 @@
 package com.cosmic.beep.repositories;
 
 import com.cosmic.beep.entities.Category;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoryRepository extends Repository<Category, Long> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 }
