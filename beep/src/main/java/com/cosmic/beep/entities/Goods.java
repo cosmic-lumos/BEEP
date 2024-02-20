@@ -13,6 +13,7 @@ import java.util.Set;
 @Entity
 public class Goods {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     @OneToOne
