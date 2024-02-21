@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 const ListContainer = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  background-color: white;
+  background-color: #EDEDED;
   border-radius: 20px;
   justify-content: space-evenly;
   display: flex;
@@ -33,20 +33,24 @@ const MyPageButton = styled.button`
   width: 9vw;
   height: 7vh;
   background-color: #a4cd45;
+  color: white;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Ko-Bold";
 `;
 
 const ReturnItemButton = styled.button`
   width: 9vw;
   height: 7vh;
   background-color: #f7482a;
+  color: white;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Ko-Bold";
 `;
 
 const ItemListContainer = styled.div`
@@ -57,6 +61,7 @@ const ItemListContainer = styled.div`
   color: black;
   margin-bottom: 15px;
   display: flex;
+  font-family: "Ko-Bold";
 `;
 
 const ItemListHeder = styled.div`
@@ -66,6 +71,7 @@ const ItemListHeder = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+  font-family: "Ko-Bold";
   font-size: 20px;
   font-weight: 900;
 `;
