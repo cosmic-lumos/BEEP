@@ -21,5 +21,6 @@ public class Goods {
     @ManyToMany
     private Set<Category> categories;
     @ManyToOne
-    private Position position;
+    @JoinColumn(name="positions_id")
+    private Positions positions;
 }
