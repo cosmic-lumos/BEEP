@@ -16,14 +16,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.datasource")
-@EnableJpaRepositories
-@EnableTransactionManagement
-public class DataSourceConfig  extends HikariConfig{
+public class DataSourceConfig {
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
+    HikariConfig hikariConfig() {
+        return new HikariConfig();
+    }
 
     @Bean
     public DataSource dataSource() {
-        return new HikariDataSource(this);
+        return new HikariDataSource(hikariConfig());
     }
 
     @Bean
@@ -33,7 +35,7 @@ public class DataSourceConfig  extends HikariConfig{
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("com.acme.domain");
+        factory.setPackagesToScan("com.cosmic.beep.entities");
         factory.setDataSource(dataSource());
         return factory;
     }
