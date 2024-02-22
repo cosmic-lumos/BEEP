@@ -1,16 +1,17 @@
 package com.cosmic.beep.controllers;
 
-import com.cosmic.beep.dtos.RentDto;
+import com.cosmic.beep.dtos.RentCreateDto;
 import com.cosmic.beep.entities.Goods;
 import com.cosmic.beep.entities.Rent;
 import com.cosmic.beep.entities.User;
 import com.cosmic.beep.repositories.GoodsRepository;
 import com.cosmic.beep.repositories.RentRepository;
 import com.cosmic.beep.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,20 +28,20 @@ public class RentController {
     private GoodsRepository goodsRepository;
 
     @PostMapping("/")
-    public Rent createRent(@RequestBody RentDto rentDto){
+    public Rent createRent(@RequestBody RentCreateDto rentCreateDto){
         Rent rent = new Rent();
-        Optional<User> user = userRepository.findById(rentDto.getUserId());
+        Optional<User> user = userRepository.findById(rentCreateDto.getUserId());
         if(user.isEmpty()){
-            return null;
+            throw new EntityNotFoundException();
         }
         rent.setUser(user.get());
-        Optional<Goods> goods = goodsRepository.findById(rentDto.getGoodsId());
+        Optional<Goods> goods = goodsRepository.findById(rentCreateDto.getGoodsId());
         if(goods.isEmpty()){
-            return null;
+            throw new EntityNotFoundException();
         }
         rent.setGoods(goods.get());
-        rent.setBeginDate(new Date());
-        rent.setReturnDate(new Date());
+        rent.setBeginDate(LocalDateTime.now());
+        rent.setReturnDate(LocalDateTime.now().plusDays(7));
         return rentRepository.save(rent);
     }
 

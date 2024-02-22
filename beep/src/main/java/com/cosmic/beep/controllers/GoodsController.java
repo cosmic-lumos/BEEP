@@ -1,12 +1,14 @@
 package com.cosmic.beep.controllers;
 
-import com.cosmic.beep.dtos.GoodsDto;
+import com.cosmic.beep.dtos.GoodsCreateDto;
 import com.cosmic.beep.entities.Category;
 import com.cosmic.beep.entities.Goods;
 import com.cosmic.beep.entities.Positions;
+import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.repositories.CategoryRepository;
 import com.cosmic.beep.repositories.GoodsRepository;
 import com.cosmic.beep.repositories.PositionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,15 +29,15 @@ public class GoodsController {
     private GoodsRepository goodsRepository;
 
     @PostMapping("/")
-    public Goods createGoods(@RequestBody GoodsDto goodsDto){
+    public Goods createGoods(@RequestBody GoodsCreateDto goodsCreateDto){
         Goods goods = new Goods();
-        goods.setName(goodsDto.getName());
-        if(goodsDto.getPositionId() != null){
-            Optional<Positions> position = positionRepository.findById(goodsDto.getPositionId());
+        goods.setName(goodsCreateDto.getName());
+        if(goodsCreateDto.getPositionId() != null){
+            Optional<Positions> position = positionRepository.findById(goodsCreateDto.getPositionId());
             position.ifPresent(goods::setPositions);
         }
-        if(goodsDto.getCategoryIds() != null){
-            goods.setCategories(new HashSet<>(categoryRepository.findAllById(goodsDto.getCategoryIds())));
+        if(goodsCreateDto.getCategoryIds() != null){
+            goods.setCategory(categoryRepository.findById(goodsCreateDto.getCategoryIds()).get());
         }
         return goodsRepository.save(goods);
     }
@@ -54,11 +56,11 @@ public class GoodsController {
     public Optional<Goods> setGoodsPositionById(@PathVariable Long id, @PathVariable Long positionId){
         Optional<Goods> goods = goodsRepository.findById(id);
         if(goods.isEmpty()){
-            return goods;
+            throw new EntityNotFoundException("goods가 없습니다.");
         }
         Optional<Positions> position = positionRepository.findById(positionId);
         if(position.isEmpty()){
-            return goods;
+            throw new EntityNotFoundException("positions이 없습니다.");
         }
         goods.get().setPositions(position.get());
         goodsRepository.save(goods.get());
@@ -67,6 +69,9 @@ public class GoodsController {
 
     @GetMapping("/positions/{id}")
     public List<Goods> getGoodsByPositionId(@PathVariable Long id){
+        if(positionRepository.findById(id).isEmpty()){
+            throw new ResourceNotFound(id);
+        }
         return goodsRepository.findByPositionsId(id);
     }
 
@@ -80,7 +85,7 @@ public class GoodsController {
         if(category.isEmpty()){
             return goods;
         }
-        goods.get().getCategories().add(category.get());
+        goods.get().setCategory(category.get());
         goodsRepository.save(goods.get());
         return goods;
     }

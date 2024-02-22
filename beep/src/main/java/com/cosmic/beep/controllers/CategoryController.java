@@ -18,8 +18,8 @@ public class CategoryController {
     @PostMapping("/")
     public Category createCategory(@RequestBody CategoryDto categoryDto){
         Category category = new Category();
-        category.setName(categoryDto.getName());
-        category.setIcon(categoryDto.getIcon());
+        category.setName(categoryDto.name());
+        category.setIcon(categoryDto.icon());
         return categoryRepository.save(category);
     }
 

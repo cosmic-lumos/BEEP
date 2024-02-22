@@ -1,6 +1,7 @@
 package com.cosmic.beep.controllers;
 
-import com.cosmic.beep.dtos.UserDto;
+import com.cosmic.beep.dtos.RentGoodsDto;
+import com.cosmic.beep.dtos.UserCreateDto;
 import com.cosmic.beep.entities.Rent;
 import com.cosmic.beep.entities.User;
 import com.cosmic.beep.repositories.RentRepository;
@@ -26,13 +27,13 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public User createUser(@RequestBody UserDto userDto){
+    public User createUser(@RequestBody UserCreateDto userCreateDto){
         User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setUsername(userDto.getUsername());
+        user.setEmail(userCreateDto.getEmail());
+        user.setPassword(userCreateDto.getPassword());
+        user.setFirstName(userCreateDto.getFirstName());
+        user.setLastName(userCreateDto.getLastName());
+        user.setUsername(userCreateDto.getUsername());
         return userRepository.save(user);
     }
 
@@ -42,9 +43,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}/rents")
-    public List<Rent> allRents(@PathVariable Long id){
+    public List<RentGoodsDto> allRents(@PathVariable Long id){
         Optional<User> user = userRepository.findById(id);
-        return user.map(value -> rentRepository.findByUser(value)).orElse(null);
+        return user.map(value -> rentRepository.findByUser(value).stream().map(RentGoodsDto::from).toList()).orElse(null);
     }
 
 }
