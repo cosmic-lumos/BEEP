@@ -15,7 +15,7 @@ const Header = styled.div`
   font-family: "En";
   font-size: 70px;
   color: #B9F82B;
-  width: 300px;
+  width: 20vw;
   height: 90px;
 `;
 
@@ -29,7 +29,7 @@ function MainPage() {
         <Header>BEEP!</Header>
         <BorrowedItemListComponent></BorrowedItemListComponent>
       </Container>
-      
+
       {/* right container */}
       <Container width="70%" height="100vh" flexDirection="column">
         <CheckStockComponent></CheckStockComponent>

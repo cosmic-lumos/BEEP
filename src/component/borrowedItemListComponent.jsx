@@ -107,7 +107,7 @@ const ItemListReturnDate = styled.div`
 
 function ItemLogo({ category }) {
   let logoSvg;
-  console.log(logoSvg);
+  // console.log(logoSvg);
 
   if (!category) {
     return null; // 또는 다른 처리 로직 추가
