@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class RentDto {
-    private Long id;
-    private GoodsDto goods;
-
+    private Long goodsId;
+    private Long userId;
 }
