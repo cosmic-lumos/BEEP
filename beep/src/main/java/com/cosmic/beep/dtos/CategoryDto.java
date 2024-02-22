@@ -1,9 +1,12 @@
 package com.cosmic.beep.dtos;
 
+import com.cosmic.beep.entities.Category;
 import lombok.Data;
 
-@Data
-public class CategoryDto {
-    private String name;
-    private String icon;
+import java.util.List;
+
+public record CategoryDto(String name, String icon) {
+    public static CategoryDto from(Category category) {
+        return new CategoryDto(category.getName(), category.getIcon());
+    }
 }
