@@ -18,8 +18,9 @@ public class Goods {
     private String name;
     @OneToOne
     private Rent rent;
-    @ManyToMany
-    private Set<Category> categories;
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
     @ManyToOne
     @JoinColumn(name="positions_id")
     private Positions positions;

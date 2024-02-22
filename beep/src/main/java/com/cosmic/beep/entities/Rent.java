@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +19,6 @@ public class Rent {
     private User user;
     @OneToOne
     private Goods goods;
-    private Date beginDate;
-    private Date returnDate;
+    private LocalDateTime beginDate;
+    private LocalDateTime returnDate;
 }

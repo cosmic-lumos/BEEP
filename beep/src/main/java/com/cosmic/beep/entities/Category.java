@@ -16,7 +16,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "categories")
+    @OneToMany
     private Set<Goods> goods;
     private String icon;
 }
