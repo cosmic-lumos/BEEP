@@ -2,7 +2,6 @@ package com.cosmic.beep.controllers;
 
 import com.cosmic.beep.dtos.RentGoodsDto;
 import com.cosmic.beep.dtos.UserCreateDto;
-import com.cosmic.beep.entities.Rent;
 import com.cosmic.beep.entities.User;
 import com.cosmic.beep.repositories.RentRepository;
 import com.cosmic.beep.repositories.UserRepository;
@@ -45,7 +44,7 @@ public class UserController {
     @GetMapping("/{id}/rents")
     public List<RentGoodsDto> allRents(@PathVariable Long id){
         Optional<User> user = userRepository.findById(id);
-        return user.map(value -> rentRepository.findByUser(value).stream().map(RentGoodsDto::from).toList()).orElse(null);
+        return user.map(value -> rentRepository.findByUser(value).stream().map(RentGoodsDto::of).toList()).orElse(null);
     }
 
 }

@@ -4,18 +4,13 @@ import com.cosmic.beep.dtos.GoodsCreateDto;
 import com.cosmic.beep.dtos.GoodsDto;
 import com.cosmic.beep.entities.Category;
 import com.cosmic.beep.entities.Goods;
-import com.cosmic.beep.entities.Positions;
-import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.repositories.CategoryRepository;
 import com.cosmic.beep.repositories.GoodsRepository;
 import com.cosmic.beep.repositories.PositionRepository;
 import com.cosmic.beep.services.GoodsService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,32 +52,13 @@ public class GoodsController {
         return goodsService.getAllGoods().stream().map(GoodsDto::of).toList();
     }
 
+    @Operation(
+            summary = "특정 물품의 현재 정보를 가져옵니다.",
+            description = "물품의 정보를 제공합니다."
+    )
     @GetMapping("/{id}")
-    public Optional<Goods> getGoodsById(@PathVariable Long id){
-        return goodsRepository.findById(id);
-    }
-
-    @PostMapping("/{id}/positions/{positionId}")
-    public Optional<Goods> setGoodsPositionById(@PathVariable Long id, @PathVariable Long positionId){
-        Optional<Goods> goods = goodsRepository.findById(id);
-        if(goods.isEmpty()){
-            throw new EntityNotFoundException("goods가 없습니다.");
-        }
-        Optional<Positions> position = positionRepository.findById(positionId);
-        if(position.isEmpty()){
-            throw new EntityNotFoundException("positions이 없습니다.");
-        }
-        goods.get().setPositions(position.get());
-        goodsRepository.save(goods.get());
-        return goods;
-    }
-
-    @GetMapping("/positions/{id}")
-    public List<Goods> getGoodsByPositionId(@PathVariable Long id){
-        if(positionRepository.findById(id).isEmpty()){
-            throw new ResourceNotFound(id);
-        }
-        return goodsRepository.findByPositionsId(id);
+    public GoodsDto getGoodsById(@PathVariable Long id){
+        return GoodsDto.of(goodsService.getGoods(id));
     }
 
     @PostMapping("/{id}/category/{categoryId}")

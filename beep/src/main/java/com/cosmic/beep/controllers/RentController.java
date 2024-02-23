@@ -1,58 +1,38 @@
 package com.cosmic.beep.controllers;
 
 import com.cosmic.beep.dtos.RentCreateDto;
-import com.cosmic.beep.entities.Goods;
-import com.cosmic.beep.entities.Rent;
-import com.cosmic.beep.entities.User;
-import com.cosmic.beep.repositories.GoodsRepository;
-import com.cosmic.beep.repositories.RentRepository;
-import com.cosmic.beep.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.cosmic.beep.dtos.RentGoodsDto;
+import com.cosmic.beep.services.RentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+@Tag(name="대여/반납 관련", description = "물품 대여 및 반납과 관련된 API입니다.")
 @RestController
 @RequestMapping("/api/rent")
 public class RentController {
     @Autowired
-    private UserRepository userRepository;
+    private RentService rentService;
 
-    @Autowired
-    private RentRepository rentRepository;
-
-    @Autowired
-    private GoodsRepository goodsRepository;
-
+    @Operation(
+            summary = "물건을 빌립니다.",
+            description = "유저 정보가 반드시 필요합니다."
+    )
     @PostMapping("/")
-    public Rent createRent(@RequestBody RentCreateDto rentCreateDto){
-        Rent rent = new Rent();
-        Optional<User> user = userRepository.findById(rentCreateDto.getUserId());
-        if(user.isEmpty()){
-            throw new EntityNotFoundException();
-        }
-        rent.setUser(user.get());
-        Optional<Goods> goods = goodsRepository.findById(rentCreateDto.getGoodsId());
-        if(goods.isEmpty()){
-            throw new EntityNotFoundException();
-        }
-        rent.setGoods(goods.get());
-        rent.setBeginDate(LocalDateTime.now());
-        rent.setReturnDate(LocalDateTime.now().plusDays(7));
-        return rentRepository.save(rent);
+    public List<RentGoodsDto> createRent(@RequestBody @Valid RentCreateDto rentCreateDto){
+        return rentService.rentGoods(rentCreateDto.userId(), rentCreateDto.goodsId()).stream().map(RentGoodsDto::of).toList();
     }
 
-    @PostMapping("/return/{id}")
-    public List<Rent> returnRented(@PathVariable Long id){
-        Optional<Rent> rent = rentRepository.findByGoodsId(id);
-        if(rent.isEmpty()){
-            return null;
-        }
-        User user = rent.get().getUser();
-        rentRepository.delete(rent.get());
-        return rentRepository.findByUser(user);
+    @Operation(
+            summary = "물건을 반납합니다.",
+            description = "물건의 id를 parameter로 받고 해당하는 물건이 반납됩니다."
+    )
+    @DeleteMapping("/{id}")
+    public List<RentGoodsDto> returnRented(@PathVariable Long id){
+        return rentService.returnGoods(id).stream().map(RentGoodsDto::of).toList();
     }
 }

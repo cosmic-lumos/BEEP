@@ -1,5 +1,6 @@
 package com.cosmic.beep.handlers;
 
+import com.cosmic.beep.exceptions.MaximumRented;
 import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.dtos.RestResponseErrorDto;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     RestResponseErrorDto handleResourceNotFound(ResourceNotFound ex){
+        return new RestResponseErrorDto(
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    RestResponseErrorDto handleMaximumRented(MaximumRented ex){
         return new RestResponseErrorDto(
                 ex.getMessage(),
                 LocalDateTime.now()

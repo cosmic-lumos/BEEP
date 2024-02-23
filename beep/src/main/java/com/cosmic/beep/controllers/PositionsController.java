@@ -1,35 +1,48 @@
 package com.cosmic.beep.controllers;
 
+import com.cosmic.beep.dtos.NameOnlyDto;
 import com.cosmic.beep.dtos.PositionDto;
 import com.cosmic.beep.entities.Positions;
-import com.cosmic.beep.repositories.PositionRepository;
+import com.cosmic.beep.services.GoodsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Tag(name="위치 및 카테고리 관련", description = "위치 및 카테고리를 관리하는 API입니다.")
 @RestController
 @RequestMapping("/api/positions")
 public class PositionsController {
     @Autowired
-    private PositionRepository positionRepository;
+    private GoodsService goodsService;
 
+    @Operation(
+            summary = "위치를 새롭게 만듭니다.",
+            description = "중복된 이름을 만들 수는 없습니다."
+    )
     @PostMapping("/")
-    public Positions createPosition(@RequestBody PositionDto positionDto) {
-        Positions positions = new Positions();
-        positions.setName(positionDto.getName());
-        return positionRepository.save(positions);
+    public Positions createPosition(@RequestBody NameOnlyDto nameDto) {
+        return goodsService.createPosition(nameDto.name());
     }
 
+    @Operation(
+            summary = "모든 위치 정보를 불러옵니다.",
+            description = "모든 위치에 존재하는 물건들도 같이 불러옵니다."
+    )
     @GetMapping("/")
-    public List<Positions> getPositions() {
-        return positionRepository.findAll();
+    public List<PositionDto> getPositions() {
+        return goodsService.getAllPositions().stream().map(PositionDto::of).toList();
     }
 
+    @Operation(
+            summary = "특정 위치의 물건들을 불러옵니다.",
+            description = "id에 해당하는 위치의 물건들을 불러옵니다."
+    )
     @GetMapping("/{id}")
-    public Optional<Positions> getPositionById(@PathVariable Long id){
-        return positionRepository.findById(id);
+    public PositionDto getPositionById(@PathVariable Long id){
+        return PositionDto.of(goodsService.getPosition(id));
     }
 
 }

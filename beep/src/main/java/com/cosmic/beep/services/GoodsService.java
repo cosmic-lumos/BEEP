@@ -2,6 +2,7 @@ package com.cosmic.beep.services;
 
 import com.cosmic.beep.dtos.GoodsCreateDto;
 import com.cosmic.beep.entities.Goods;
+import com.cosmic.beep.entities.Positions;
 import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.repositories.CategoryRepository;
 import com.cosmic.beep.repositories.GoodsRepository;
@@ -28,7 +29,24 @@ public class GoodsService {
                 .build());
     }
 
+    public Goods getGoods(Long id){
+        return goodsRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFound(id));
+    }
+
     public List<Goods> getAllGoods(){
         return goodsRepository.findAll();
+    }
+
+    public Positions getPosition(Long id){
+        return positionRepository.findById(id).orElseThrow(()->new ResourceNotFound(id));
+    }
+
+    public List<Positions> getAllPositions(){
+        return positionRepository.findAll();
+    }
+
+    public Positions createPosition(String name){
+        return positionRepository.save(Positions.builder().name(name).build());
     }
 }
