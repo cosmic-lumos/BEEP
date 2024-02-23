@@ -10,14 +10,20 @@ import com.cosmic.beep.repositories.CategoryRepository;
 import com.cosmic.beep.repositories.GoodsRepository;
 import com.cosmic.beep.repositories.PositionRepository;
 import com.cosmic.beep.services.GoodsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name="물품관련", description = "물품관리에 관련된 API입니다.")
 @RestController
 @RequestMapping("/api/goods")
 public class GoodsController {
@@ -33,8 +39,12 @@ public class GoodsController {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    @Operation(
+            summary = "새로운 물품을 추가합니다.",
+            description = "물품의 이름과 위치 정보, 카테고리를 입력으로 새로운 물품을 추가합니다."
+    )
     @PostMapping("/")
-    public GoodsDto createGoods(@RequestBody GoodsCreateDto goodsCreateDto){
+    public GoodsDto createGoods(@RequestBody @Valid GoodsCreateDto goodsCreateDto){
         return GoodsDto.of(goodsService.createGoods(goodsCreateDto));
     }
 
