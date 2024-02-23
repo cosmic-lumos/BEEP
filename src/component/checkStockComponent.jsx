@@ -9,13 +9,15 @@ const Container = styled.div`
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   font-family: "Ko-Bold";
-  background-color: #EDEDED;
+  background-color: ${(props) => props.bgColor};
   border-radius: 20px;
+  position: relative;
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
   justify-content: ${(props) => props.justifyContent};
   align-items: center;
 `;
+
 const Title = styled.div`
   font-family: "Ko-Bold";
   font-size: ${(props) => props.fontSize};
@@ -24,7 +26,7 @@ const Title = styled.div`
 
 const MapContainer = styled.div`
   width: 90%;
-  height: 100%;
+  height: 40%;
   padding: 10px 10px 10px 10px;
   margin: 0px 0px 20px 0px;
   font-family: "Ko-Bold";
@@ -51,34 +53,33 @@ const MapBtn = styled.div`
 `;
 
 const MapBtn1 = styled(MapBtn)`
-  width: 18.8%;
-  height: 11.5%;
-  left: 1.5%;
-  top: 45.1%;
+  width: 19.6%;
+  height: 12.65%;
+  left: 0%;
+  top: 44.5%;
 `;
 
 const MapBtn2 = styled(MapBtn)`
-  width: 17.7%;
+  width: 18.1%;
   height: 12.4%;
-  left: 19.3%;
-  top: 85%;
+  left: 18.5%;
+  top: 87.2%;
 `;
 
 const MapBtn3 = styled(MapBtn)`
   border-radius: 50%;
-  width: 4.12%;
-  height: 9.1%;
-  left: 14.3%;
-  top: 86%;
+  width: 4.1%;
+  height: 9.5%;
+  left: 13.6%;
+  top: 88.1%;
 `;
 
 const MapBtn4 = styled(MapBtn)`
   width: 11.2%;
-  height: 13.5%;
-  left: 53.5%;
-  top: 3%;
+  height: 13.9%;
+  left: 53.7%;
+  top: 0%;
 `;
-
 
 const BorrowBtn = styled.div`
   width: 40%;
@@ -106,7 +107,7 @@ const StockListContainer = styled.div`
   width: 100%;
   height: 90%;
   margin: 0px 0px 0px 0px;
-  padding: 30px 30px 30px 30px;
+  padding: 30px;
   font-family: "Ko-Bold";
   background-color: #E2E5E2;
   border-radius: 20px;
@@ -139,13 +140,16 @@ const ItemListLogo = styled.div`
   align-items: center;
 `;
 
-
 const ItemListName = styled.div`
 font-family: "Ko-Regular";
   font-size: 20px;
   font-weight: 900;
 `;
 
+const Itemdiv = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 function ItemLogo({ category }) {
   let logoSvg;
@@ -203,7 +207,6 @@ function ItemLogo({ category }) {
   return <ItemListLogo>{logoSvg}</ItemListLogo>;
 }
 
-
 function Item({ item }) {
   return (
     <ItemListContainer>
@@ -215,11 +218,11 @@ function Item({ item }) {
 
 function ItemList({ item }) {
   return (
-    <div>
+    <Itemdiv>
       {item.map((item) => (
         <Item item={item} key={item.index}></Item>
       ))}
-    </div>
+    </Itemdiv>
   );
 }
 ///////////
@@ -322,22 +325,304 @@ const CheckStockComponent = (props) => {
       returnDate: "2024-03-02",
       category: "Book",
     },
+    {
+      index: 2,
+      id: 456,
+      name: "샤프",
+      returnDate: "2024-03-02",
+      category: "Pencil",
+    },
+    {
+      index: 3,
+      id: 789,
+      name: "컴퓨터 네트워크",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 4,
+      id: 101112,
+      name: "쉽게 배우는 알고리즘",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 5,
+      id: 101112,
+      name: "데이터 통신",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 6,
+      id: 101112,
+      name: "머신러닝 기초",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "객체지향 알아보기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "재밌는 데이터 구조",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "선형대수",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "파이썬 마스터",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "C++ 찢어버리기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 2,
+      id: 456,
+      name: "샤프",
+      returnDate: "2024-03-02",
+      category: "Pencil",
+    },
+    {
+      index: 3,
+      id: 789,
+      name: "컴퓨터 네트워크",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 4,
+      id: 101112,
+      name: "쉽게 배우는 알고리즘",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 5,
+      id: 101112,
+      name: "데이터 통신",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 6,
+      id: 101112,
+      name: "머신러닝 기초",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "객체지향 알아보기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "재밌는 데이터 구조",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "선형대수",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "파이썬 마스터",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "C++ 찢어버리기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 2,
+      id: 456,
+      name: "샤프",
+      returnDate: "2024-03-02",
+      category: "Pencil",
+    },
+    {
+      index: 3,
+      id: 789,
+      name: "컴퓨터 네트워크",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 4,
+      id: 101112,
+      name: "쉽게 배우는 알고리즘",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 5,
+      id: 101112,
+      name: "데이터 통신",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 6,
+      id: 101112,
+      name: "머신러닝 기초",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "객체지향 알아보기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "재밌는 데이터 구조",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "선형대수",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "파이썬 마스터",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "C++ 찢어버리기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 2,
+      id: 456,
+      name: "샤프",
+      returnDate: "2024-03-02",
+      category: "Pencil",
+    },
+    {
+      index: 3,
+      id: 789,
+      name: "컴퓨터 네트워크",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 4,
+      id: 101112,
+      name: "쉽게 배우는 알고리즘",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 5,
+      id: 101112,
+      name: "데이터 통신",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 6,
+      id: 101112,
+      name: "머신러닝 기초",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "객체지향 알아보기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "재밌는 데이터 구조",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "선형대수",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "파이썬 마스터",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 7,
+      id: 101112,
+      name: "C++ 찢어버리기",
+      returnDate: "2024-03-02",
+      category: "Book",
+    },
   ]);
 
 
   return (
-    <Container width="90%" height="90%" flexDirection="column" justifycontent="center" margin="0px" padding="10px">
-      <Container width="100%" height="10%" flexDirection="row" justifyContent="flex-start" margin="0px" padding="10px">
-        <Title fontSize="45px" margin="0px 0px 0px 30px"> 대여 현황 확인 </Title>
+    <Container width="90%" height="90%" flexDirection="column" justifycontent="center" margin="0px" padding="10px" bgColor="#EDEDED">
+      <Container width="90%" height="10%" flexDirection="row" justifyContent="flex-start" margin="0px" padding="10px">
+        <Title fontSize="45px" margin="0px"> 대여 현황 확인 </Title>
       </Container>
       <MapContainer>
-        <img src={mapimg} width="100%" height="100%"></img>
-        <MapBtn1></MapBtn1>
-        <MapBtn2></MapBtn2>
-        <MapBtn3></MapBtn3>
-        <MapBtn4></MapBtn4>
+        <Container width="100%" height="100%" flexDirection="column" justifycontent="center" margin="0px" padding="0px">
+          <img src={mapimg} width="100%" height="100%"></img>
+          <MapBtn1></MapBtn1>
+          <MapBtn2></MapBtn2>
+          <MapBtn3></MapBtn3>
+          <MapBtn4></MapBtn4>
+        </Container>
       </MapContainer>
-      <Container width="90%" height="400px" flexDirection="row" justifyContent="center" margin="0px 0px 20px 0px" padding="0px">
+      <Container width="92%" height="40%" flexDirection="row" justifyContent="center" margin="0px 0px 0px 0px" padding="0px">
         <BorrowBtn>빌리기</BorrowBtn>
         <StockListContainer>
           <Title fontSize="30px" margin="0px 0px 10px 0px"> { location[1].name } </Title>
