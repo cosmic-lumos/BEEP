@@ -9,6 +9,8 @@ import com.cosmic.beep.repositories.PositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GoodsService {
     @Autowired
@@ -24,5 +26,9 @@ public class GoodsService {
                 .positions(positionRepository.findById(goodsCreateDto.getPositionId()).orElseThrow(() -> new ResourceNotFound(goodsCreateDto.getPositionId())))
                 .category(categoryRepository.findById(goodsCreateDto.getCategoryId()).orElseThrow(() -> new ResourceNotFound(goodsCreateDto.getCategoryId())))
                 .build());
+    }
+
+    public List<Goods> getAllGoods(){
+        return goodsRepository.findAll();
     }
 }

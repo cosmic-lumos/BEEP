@@ -48,9 +48,13 @@ public class GoodsController {
         return GoodsDto.of(goodsService.createGoods(goodsCreateDto));
     }
 
+    @Operation(
+            summary = "모든 물품의 정보를 가져옵니다.",
+            description = "물품의 이름, 위치, 카테고리, 빌림여부를 제공합니다."
+    )
     @GetMapping("/")
-    public List<Goods> getGoods(){
-        return goodsRepository.findAll();
+    public List<GoodsDto> getGoods(){
+        return goodsService.getAllGoods().stream().map(GoodsDto::of).toList();
     }
 
     @GetMapping("/{id}")

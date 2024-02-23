@@ -10,6 +10,7 @@ public class GoodsDto {
     private Long id;
     private String name;
     private String category;
+    private String position;
     private Boolean isRenting;
 
     public static GoodsDto of(Goods goods){
@@ -17,6 +18,7 @@ public class GoodsDto {
                 .id(goods.getId())
                 .name(goods.getName())
                 .category(goods.getCategory().getName())
+                .position(goods.getPositions().getName())
                 .isRenting(goods.getRent()!=null)
                 .build();
     }
