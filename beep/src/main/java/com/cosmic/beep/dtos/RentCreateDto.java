@@ -1,9 +1,7 @@
 package com.cosmic.beep.dtos;
 
-import lombok.Data;
+import lombok.Builder;
 
-@Data
-public class RentCreateDto {
-    private Long goodsId;
-    private Long userId;
+@Builder
+public record RentCreateDto(Long goodsId, Long userId) {
 }

@@ -4,15 +4,8 @@ import com.cosmic.beep.entities.Goods;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @Builder
-public class GoodsDto {
-    private Long id;
-    private String name;
-    private String category;
-    private String position;
-    private Boolean isRenting;
-
+public record GoodsDto(Long id, String name, String category, String position, Boolean isRenting) {
     public static GoodsDto of(Goods goods){
         return GoodsDto.builder()
                 .id(goods.getId())

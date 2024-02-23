@@ -6,12 +6,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Builder
-public class PositionDto {
-    private String name;
-    private List<GoodsDto> goods;
-
+public record PositionDto(String name, List<GoodsDto> goods) {
     public static PositionDto of(Positions positions){
         return PositionDto.builder()
                 .name(positions.getName())
