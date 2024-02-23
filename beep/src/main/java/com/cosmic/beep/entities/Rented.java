@@ -2,15 +2,17 @@ package com.cosmic.beep.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Rented {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +21,6 @@ public class Rented {
     private User user;
     @ManyToOne
     private Goods goods;
-    private Date beginDate;
-    private Date returnDate;
+    private LocalDateTime beginDate;
+    private LocalDateTime returnedDate;
 }
