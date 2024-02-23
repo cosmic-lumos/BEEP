@@ -1,7 +1,32 @@
 import styled from "styled-components";
+import BorrowedItemListComponent from "../component/borrowedItemListComponent";
 import React, { useState, useEffect } from "react";
 
-const ListContainer = styled.div`
+const BackGround = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #212529;
+`;
+
+const Container = styled.div`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: ${(props) => props.flexDirection};
+`;
+
+const Header = styled.div`
+  font-family: "En";
+  font-size: 70px;
+  color: #b9f82b;
+  width: 20vw;
+  height: 90px;
+  margin-bottom: 20px;
+`;
+
+const BorrowContainer = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   background-color: #ededed;
@@ -12,76 +37,32 @@ const ListContainer = styled.div`
   align-items: center;
 `;
 
-const BorrowedItemListContainer = styled.div`
-  width: 18vw;
-  height: 70vh;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-`;
-
-const ItemListButtonSet = styled.div`
-  width: 20vw;
-  display: flex;
-  justify-content: ${(props) => props.justify};
-  margin-right: ${(props) => props.margin};
-  margin-bottom: 10px;
-`;
-
-const MyPageButton = styled.button`
-  width: 9vw;
-  height: 7vh;
-  background-color: #a4cd45;
-  color: white;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Ko-Bold";
-`;
-
-const ReturnItemButton = styled.button`
-  width: 9vw;
-  height: 7vh;
-  background-color: #f7482a;
-  color: white;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Ko-Bold";
-`;
-
-const ItemListContainer = styled.div`
-  width: 18vw;
-  height: 10vh;
-  background-color: #e2e5e2;
-  border-radius: 20px;
+const BorrowContainerHeader = styled.div`
+  width: 95%;
+  height: 10%;
   color: black;
-  margin-bottom: 15px;
-  display: flex;
   font-family: "Ko-Bold";
-`;
-
-const ItemListHeder = styled.div`
-  width: 18vw;
-  height: 10vh;
-  color: black;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  font-family: "Ko-Bold";
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 900;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+`;
+
+const BorrowListContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: start;
+  display: flex;
+  flex-direction: ${(props) => props.flexDirection};
 `;
 
 const ItemListLogo = styled.div`
-  width: 10vh;
-  height: 10vh;
+  width: 7vh;
+  height: 7vh;
   background-color: #b9f82b;
-  border-radius: 20px;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +70,7 @@ const ItemListLogo = styled.div`
 
 const ItemListDescription = styled.div`
   width: 15vw;
-  height: 10vh;
+  height: 9vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -101,9 +82,56 @@ const ItemListName = styled.div`
   font-size: 20px;
   font-weight: 900;
 `;
-const ItemListReturnDate = styled.div`
-  font-size: 15px;
-  color: grey;
+
+const NoteContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-color: #e2e5e2;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const Text = styled.div`
+  font-size: ${(props) => props.size};
+  font-family: "Ko-Regular";
+`;
+
+const BoldText = styled.div`
+  font-size: ${(props) => props.size};
+  font-family: "Ko-Bold";
+`;
+
+const NoteCheckBox = styled.input`
+  width: 20px;
+  height: 20px;
+`;
+
+const BorrowButton = styled.button`
+  width: 15%;
+  height: 50%;
+  border: 10px;
+  background-color: #b9f82b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BorrowTextBox = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: start;
+  flex-direction: column;
+`;
+
+const BorrowSetContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 `;
 
 function ItemLogo({ category }) {
@@ -164,13 +192,12 @@ function ItemLogo({ category }) {
 
 function Item({ item }) {
   return (
-    <ItemListContainer>
+    <Container width="100%" height="15%">
       <ItemLogo category={item.category}></ItemLogo>
       <ItemListDescription>
         <ItemListName>{item.name}</ItemListName>
-        <ItemListReturnDate>{item.returnDate}</ItemListReturnDate>
       </ItemListDescription>
-    </ItemListContainer>
+    </Container>
   );
 }
 
@@ -184,55 +211,99 @@ function ItemList({ item }) {
   );
 }
 
-const BorrowedItemListComponent = (props) => {
+function BorrowPage() {
   const [items, setItems] = useState([
     {
       index: 1,
       id: 123,
       name: "볼펜",
-      returnDate: "2024-03-02",
       category: "Pencil",
     },
     {
       index: 2,
       id: 456,
       name: "우산",
-      returnDate: "2024-03-02",
       category: "Umbrella",
     },
     {
       index: 3,
       id: 789,
       name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
       category: "Book",
     },
     {
       index: 4,
       id: 101112,
       name: "데이터 통신",
-      returnDate: "2024-03-02",
+      category: "Book",
+    },
+    {
+      index: 5,
+      id: 101112,
+      name: "데이터 구조",
       category: "Book",
     },
   ]);
 
-  return (
-    <ListContainer width={props.width} height={props.height}>
-      <ItemListHeder>내가 빌린 항목</ItemListHeder>
-      <BorrowedItemListContainer>
-        <ItemList item={items}></ItemList>
-      </BorrowedItemListContainer>
-      <ItemListButtonSet
-        justify={props.visiability === true ? "space-evenly" : "end"}
-        margin={props.visiability === true ? "0px" : "20px"}
-      >
-        <MyPageButton>My Page</MyPageButton>
-        {props.visiability === true ? (
-          <ReturnItemButton>반납하기</ReturnItemButton>
-        ) : null}
-      </ItemListButtonSet>
-    </ListContainer>
-  );
-};
+  const d = new Date();
 
-export default BorrowedItemListComponent;
+  // 오늘날의 년, 월, 일 데이터
+  const day = d.getDate();
+  const month = d.getMonth();
+  const year = d.getFullYear();
+  const returnDate = new Date(new Date().setDate(day + 7)).toLocaleDateString();
+
+  return (
+    <BackGround>
+      <Container width="100vw" height="100vh" flexDirection="row">
+        {/* left container */}
+        <Container width="30%" height="100vh" flexDirection="column">
+          <Header>BEEP!</Header>
+          <BorrowedItemListComponent
+            width="20vw"
+            height="80vh"
+            visibility={false}
+          ></BorrowedItemListComponent>
+        </Container>
+
+        {/* right container */}
+        <Container width="70%" height="100vh">
+          <BorrowContainer width="90%" height="92%">
+            <BorrowContainerHeader>물품 대여하기</BorrowContainerHeader>
+            <Container width="95%" height="50%" flexDirection="column">
+              <BorrowListContainer>
+                <ItemList item={items}></ItemList>
+              </BorrowListContainer>
+            </Container>
+            <Container width="95%" height="20%" flexDirection="column">
+              <NoteContainer>
+                <Text size="30px">각서</Text>
+                <Text size="20px">
+                  물품 손상 혹은 분실 시 발생하는 모든 책임은 본인에게 있음에
+                  동의합니다.
+                </Text>
+                <Container>
+                  <NoteCheckBox type="checkbox"></NoteCheckBox>
+                  <Text>동의합니다.</Text>
+                </Container>
+              </NoteContainer>
+            </Container>
+            <Container width="95%" height="20%" flexDirection="row">
+              <BorrowSetContainer>
+                <BorrowTextBox>
+                  <Text size="25px">빌리는 물품 : {items.length}개</Text>
+                  <Text size="25px">반납 예정일 : {returnDate}일</Text>
+                </BorrowTextBox>
+                <BorrowButton>
+                  <BoldText size="35px">빌리기</BoldText>
+                </BorrowButton>
+              </BorrowSetContainer>
+            </Container>
+          </BorrowContainer>
+        </Container>
+      </Container>
+    </BackGround>
+  );
+}
+
+export default BorrowPage;

@@ -14,20 +14,24 @@ const Container = styled.div`
 const Header = styled.div`
   font-family: "En";
   font-size: 70px;
-  color: #B9F82B;
+  color: #b9f82b;
   width: 20vw;
   height: 90px;
+  margin-bottom: 20px;
 `;
 
 function MainPage() {
   return (
     // main Container
-    <Container width="100vw" height="100vh" flexDirection="row"> 
-
+    <Container width="100vw" height="100vh" flexDirection="row">
       {/* left container */}
       <Container width="30%" height="100vh" flexDirection="column">
         <Header>BEEP!</Header>
-        <BorrowedItemListComponent></BorrowedItemListComponent>
+        <BorrowedItemListComponent
+          width="20vw"
+          height="80vh"
+          visiability={true}
+        ></BorrowedItemListComponent>
       </Container>
 
       {/* right container */}
