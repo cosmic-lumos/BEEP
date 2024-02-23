@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -19,5 +20,5 @@ public class Positions {
     private Long id;
     private String name;
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "positions")
-    private Set<Goods> goods;
+    private List<Goods> goods;
 }
