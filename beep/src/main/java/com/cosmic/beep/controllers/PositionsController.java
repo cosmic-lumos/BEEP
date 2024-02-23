@@ -23,8 +23,8 @@ public class PositionsController {
             description = "중복된 이름을 만들 수는 없습니다."
     )
     @PostMapping("/")
-    public Positions createPosition(@RequestBody NameOnlyDto nameDto) {
-        return goodsService.createPosition(nameDto.name());
+    public PositionDto createPosition(@RequestBody NameOnlyDto nameDto) {
+        return PositionDto.of(goodsService.createPosition(nameDto.name()));
     }
 
     @Operation(
