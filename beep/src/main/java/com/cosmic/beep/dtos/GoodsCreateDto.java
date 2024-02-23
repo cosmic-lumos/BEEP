@@ -1,12 +1,12 @@
 package com.cosmic.beep.dtos;
 
+import lombok.Builder;
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
+@Builder
 public class GoodsCreateDto {
     private String name;
     private Long positionId;
-    private Long categoryIds;
+    private Long categoryId;
 }

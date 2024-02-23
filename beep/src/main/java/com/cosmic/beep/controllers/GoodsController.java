@@ -1,6 +1,7 @@
 package com.cosmic.beep.controllers;
 
 import com.cosmic.beep.dtos.GoodsCreateDto;
+import com.cosmic.beep.dtos.GoodsDto;
 import com.cosmic.beep.entities.Category;
 import com.cosmic.beep.entities.Goods;
 import com.cosmic.beep.entities.Positions;
@@ -8,6 +9,7 @@ import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.repositories.CategoryRepository;
 import com.cosmic.beep.repositories.GoodsRepository;
 import com.cosmic.beep.repositories.PositionRepository;
+import com.cosmic.beep.services.GoodsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,9 @@ import java.util.Optional;
 @RequestMapping("/api/goods")
 public class GoodsController {
     @Autowired
+    private GoodsService goodsService;
+
+    @Autowired
     private PositionRepository positionRepository;
 
     @Autowired
@@ -29,17 +34,8 @@ public class GoodsController {
     private GoodsRepository goodsRepository;
 
     @PostMapping("/")
-    public Goods createGoods(@RequestBody GoodsCreateDto goodsCreateDto){
-        Goods goods = new Goods();
-        goods.setName(goodsCreateDto.getName());
-        if(goodsCreateDto.getPositionId() != null){
-            Optional<Positions> position = positionRepository.findById(goodsCreateDto.getPositionId());
-            position.ifPresent(goods::setPositions);
-        }
-        if(goodsCreateDto.getCategoryIds() != null){
-            goods.setCategory(categoryRepository.findById(goodsCreateDto.getCategoryIds()).get());
-        }
-        return goodsRepository.save(goods);
+    public GoodsDto createGoods(@RequestBody GoodsCreateDto goodsCreateDto){
+        return GoodsDto.of(goodsService.createGoods(goodsCreateDto));
     }
 
     @GetMapping("/")

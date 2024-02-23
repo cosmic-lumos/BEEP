@@ -1,9 +1,23 @@
 package com.cosmic.beep.dtos;
 
-import java.util.List;
+import com.cosmic.beep.entities.Goods;
+import lombok.Builder;
+import lombok.Data;
 
+@Data
+@Builder
 public class GoodsDto {
     private Long id;
     private String name;
-    private CategoryDto category;
+    private String category;
+    private Boolean isRenting;
+
+    public static GoodsDto of(Goods goods){
+        return GoodsDto.builder()
+                .id(goods.getId())
+                .name(goods.getName())
+                .category(goods.getCategory().getName())
+                .isRenting(goods.getRent()!=null)
+                .build();
+    }
 }
