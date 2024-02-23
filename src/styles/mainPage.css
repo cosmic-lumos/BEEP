@@ -1,0 +1,36 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #212529;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.innerContainer {
+  width: 90vw;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.borrowedItemListComponent {
+  width: 20vw;
+  height: 85vh;
+  background-color: white;
+  border-radius: 20px;
+}
+
+.checkStockComponent {
+  width: 60vw;
+  height: 85vh;
+  background-color: white;
+  border-radius: 20px;
+}
