@@ -2,7 +2,6 @@ package com.cosmic.beep.dtos;
 
 import com.cosmic.beep.entities.Positions;
 import lombok.Builder;
-import lombok.Data;
 
 import java.util.List;
 

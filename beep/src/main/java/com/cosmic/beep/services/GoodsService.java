@@ -1,6 +1,7 @@
 package com.cosmic.beep.services;
 
 import com.cosmic.beep.dtos.GoodsCreateDto;
+import com.cosmic.beep.entities.Category;
 import com.cosmic.beep.entities.Goods;
 import com.cosmic.beep.entities.Positions;
 import com.cosmic.beep.exceptions.ResourceNotFound;
@@ -34,6 +35,20 @@ public class GoodsService {
                 .orElseThrow(()-> new ResourceNotFound(id));
     }
 
+    public Goods updateGoods(Long id, GoodsCreateDto info){
+        Goods goods = goodsRepository.findById(id).orElseThrow(()-> new ResourceNotFound(id));
+        if(info.getName() != null){
+            goods.setName(info.getName());
+        }
+        if(info.getPositionId() != null){
+            goods.setPositions(positionRepository.findById(info.getPositionId()).orElseThrow(()->new ResourceNotFound(info.getPositionId())));
+        }
+        if(info.getCategoryId() != null){
+            goods.setCategory(categoryRepository.findById(info.getCategoryId()).orElseThrow(()->new ResourceNotFound(info.getCategoryId())));
+        }
+        return goodsRepository.save(goods);
+    }
+
     public List<Goods> getAllGoods(){
         return goodsRepository.findAll();
     }
@@ -48,5 +63,18 @@ public class GoodsService {
 
     public Positions createPosition(String name){
         return positionRepository.save(Positions.builder().name(name).build());
+    }
+
+    public Category createCategory(String name){
+        return categoryRepository.save(Category.builder()
+                .name(name).build());
+    }
+
+    public List<Category> getAllCategories(){
+        return categoryRepository.findAll();
+    }
+
+    public Category getCategory(Long id){
+        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFound(id));
     }
 }
