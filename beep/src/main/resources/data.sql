@@ -7,9 +7,9 @@ VALUES
 
 INSERT INTO `User` (email, firstName, lastName, password, username)
 VALUES
-    ('admin@cosmic.com', '어드민', '계정', '1234', 'admin'),
-    ('developer@cosmic.com', '개발자', '계정', '1234', 'developer'),
-    ('staff@cosmic.com', '관리자', '계정', '1234', 'staff');
+    ('admin@cosmic.com', '어드민', '계정', '$2a$10$wXPRb.ZMyHs62F2SU7VU1OH0G5fIWRW9T4OifCCDnlmspnNraPQMq', 'admin'),
+    ('developer@cosmic.com', '개발자', '계정', '$2a$10$wXPRb.ZMyHs62F2SU7VU1OH0G5fIWRW9T4OifCCDnlmspnNraPQMq', 'developer'),
+    ('staff@cosmic.com', '관리자', '계정', '$2a$10$wXPRb.ZMyHs62F2SU7VU1OH0G5fIWRW9T4OifCCDnlmspnNraPQMq', 'staff');
 
 INSERT INTO `user_role` (user_id, role_id)
 VALUES
