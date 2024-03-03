@@ -10,6 +10,8 @@ import com.cosmic.beep.repositories.RentRepository;
 import com.cosmic.beep.repositories.RentedRepository;
 import com.cosmic.beep.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,12 +31,12 @@ public class RentService {
     @Autowired
     private RentedRepository rentedRepository;
 
-    public List<Rent> getRentedOfUser(Long userId){
-        return rentRepository.findByUser(userRepository.findById(userId).orElseThrow(()->new ResourceNotFound(userId)));
+    public List<Rent> getRentedOfUser(UserDetails userDetails){
+        return rentRepository.findByUser(userRepository.findByUsernameOrEmail(userDetails.getUsername(), userDetails.getUsername()).orElseThrow(()->new ResourceNotFound(0L)));
     }
 
-    public List<Rent> rentGoods(Long userId, Long goodsId){
-        User user = userRepository.findById(userId).orElseThrow(()->new ResourceNotFound(userId));
+    public List<Rent> rentGoods(UserDetails userDetails, Long goodsId){
+        User user = userRepository.findByUsernameOrEmail(userDetails.getUsername(), userDetails.getUsername()).orElseThrow(()->new ResourceNotFound(0L));
         if(rentRepository.findByUser(user).size() >= 5){
             throw new MaximumRented();
         }
@@ -44,7 +46,7 @@ public class RentService {
                 .beginDate(LocalDateTime.now())
                 .returnDate(LocalDateTime.now().plusDays(7))
                 .build());
-        return getRentedOfUser(userId);
+        return getRentedOfUser(userDetails);
     }
 
     public List<Rent> returnGoods(Long goodsId){
@@ -56,6 +58,6 @@ public class RentService {
                 .returnedDate(LocalDateTime.now())
                 .build());
         rentRepository.delete(rent);
-        return getRentedOfUser(rent.getUser().getId());
+        return rentRepository.findByUserId(rent.getId());
     }
 }

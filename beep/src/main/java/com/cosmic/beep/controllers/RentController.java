@@ -7,7 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rent")
 @SecurityRequirement(name="basicAuth")
+@Log4j2
 public class RentController {
     @Autowired
     private RentService rentService;
@@ -25,8 +29,8 @@ public class RentController {
             description = "유저 정보가 반드시 필요합니다."
     )
     @PostMapping("/")
-    public List<RentGoodsDto> createRent(@RequestBody @Valid RentCreateDto rentCreateDto){
-        return rentService.rentGoods(rentCreateDto.userId(), rentCreateDto.goodsId()).stream().map(RentGoodsDto::of).toList();
+    public List<RentGoodsDto> createRent(@RequestBody @Valid RentCreateDto rentCreateDto, @AuthenticationPrincipal UserDetails userDetails){
+        return rentService.rentGoods(userDetails, rentCreateDto.goodsId()).stream().map(RentGoodsDto::of).toList();
     }
 
     @Operation(
