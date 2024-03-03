@@ -3,6 +3,7 @@ package com.cosmic.beep.dtos;
 import com.cosmic.beep.entities.User;
 import lombok.Builder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -12,7 +13,7 @@ public record UserDto(Long id, String username, String fullName, List<RentGoodsD
                 .id(user.getId())
                 .username(user.getUsername())
                 .fullName(user.getLastName()+user.getFirstName())
-                .rents(user.getRents().stream().map(RentGoodsDto::of).toList())
+                .rents(user.getRents() != null ? user.getRents().stream().map(RentGoodsDto::of).toList(): new ArrayList<>())
                 .build();
     }
 }

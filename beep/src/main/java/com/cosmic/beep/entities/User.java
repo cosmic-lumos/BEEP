@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,7 +33,7 @@ public class User {
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")})
     private List<Role> roles = new ArrayList<>();
     @OneToMany
-    private List<Rent> rents;
+    private List<Rent> rents= new ArrayList<>();
     @OneToMany
-    private List<Rented> rented;
+    private List<Rented> rented = new ArrayList<>();
 }
