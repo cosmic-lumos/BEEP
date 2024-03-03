@@ -4,11 +4,12 @@ import com.cosmic.beep.dtos.GoodsCreateDto;
 import com.cosmic.beep.dtos.GoodsDto;
 import com.cosmic.beep.services.GoodsService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/goods")
 @SecurityRequirement(name="basicAuth")
+@Log4j2
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;
@@ -25,7 +27,7 @@ public class GoodsController {
             description = "물품의 이름과 위치 정보, 카테고리를 입력으로 새로운 물품을 추가합니다."
     )
     @PostMapping("/")
-    public GoodsDto createGoods(@RequestBody @Valid GoodsCreateDto goodsCreateDto){
+    public GoodsDto createGoods(@RequestBody GoodsCreateDto goodsCreateDto){
         return GoodsDto.of(goodsService.createGoods(goodsCreateDto));
     }
 
