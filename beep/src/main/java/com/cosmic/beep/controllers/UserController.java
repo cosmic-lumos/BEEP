@@ -1,22 +1,24 @@
 package com.cosmic.beep.controllers;
 
 import com.cosmic.beep.dtos.RentGoodsDto;
-import com.cosmic.beep.dtos.UserCreateDto;
 import com.cosmic.beep.dtos.UserDto;
 import com.cosmic.beep.entities.User;
 import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.repositories.RentRepository;
 import com.cosmic.beep.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name="유저 API", description = "유저 정보를 관리하는 API입니다..")
 @RestController
 @RequestMapping("/api/users")
+@SecurityRequirement(name="basicAuth")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
@@ -27,22 +29,6 @@ public class UserController {
     @GetMapping("/")
     public List<User> all() {
         return userRepository.findAll();
-    }
-
-    @Operation(
-            summary = "새로운 유저를 생성합니다."
-    )
-    @PostMapping("/")
-    public UserDto createUser(@RequestBody @Valid UserCreateDto userCreateDto){
-        if(!userCreateDto.password().equals(userCreateDto.matchingPassword())){
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-        }
-        return UserDto.of(userRepository.save(User.builder()
-                .username(userCreateDto.username())
-                .password(userCreateDto.password())
-                .firstName(userCreateDto.firstName())
-                .lastName(userCreateDto.lastName())
-                .build()));
     }
 
     @GetMapping("/{id}")

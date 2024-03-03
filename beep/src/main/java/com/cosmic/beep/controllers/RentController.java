@@ -4,6 +4,7 @@ import com.cosmic.beep.dtos.RentCreateDto;
 import com.cosmic.beep.dtos.RentGoodsDto;
 import com.cosmic.beep.services.RentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.util.List;
 @Tag(name="대여/반납 관련", description = "물품 대여 및 반납과 관련된 API입니다.")
 @RestController
 @RequestMapping("/api/rent")
+@SecurityRequirement(name="basicAuth")
 public class RentController {
     @Autowired
     private RentService rentService;

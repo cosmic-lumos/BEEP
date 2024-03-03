@@ -5,6 +5,7 @@ import com.cosmic.beep.dtos.GoodsDto;
 import com.cosmic.beep.services.GoodsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 @Tag(name="물품관련", description = "물품관리에 관련된 API입니다.")
 @RestController
 @RequestMapping("/api/goods")
+@SecurityRequirement(name="basicAuth")
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;

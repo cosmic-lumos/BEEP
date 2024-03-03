@@ -2,20 +2,19 @@ package com.cosmic.beep.controllers;
 
 import com.cosmic.beep.dtos.CategoryDto;
 import com.cosmic.beep.dtos.NameOnlyDto;
-import com.cosmic.beep.entities.Category;
-import com.cosmic.beep.repositories.CategoryRepository;
 import com.cosmic.beep.services.GoodsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name="위치 및 카테고리 관련", description = "위치 및 카테고리를 관리하는 API입니다.")
 @RestController
 @RequestMapping("/api/categories")
+@SecurityRequirement(name="basicAuth")
 public class CategoryController {
     @Autowired
     private GoodsService goodsService;
