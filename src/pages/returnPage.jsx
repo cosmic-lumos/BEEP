@@ -54,8 +54,8 @@ const BorrowContainerHeader = styled.div`
 const BorrowListContainer = styled.div`
   width: 100%;
   height: 100%;
-  align-items: center;
-  justify-content: start;
+  align-items: flex-start;
+  justify-content: flex-start;
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
 `;
@@ -359,7 +359,7 @@ GoToMain();
         <Container width="70%" height="100vh">
           <BorrowContainer width="90%" height="92%">
             <BorrowContainerHeader>물품 반납하기</BorrowContainerHeader>
-            <form onSubmit={sendItemId} style={{opacity : '50%'}}>
+            <form onSubmit={sendItemId} style={{opacity : '0%'}}>
               <input type="number" autoFocus onChange={onChange} value={itemid} ></input>
               <b>값: {itemid}</b>
             </form>

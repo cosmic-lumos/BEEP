@@ -4,6 +4,7 @@ import { useState } from "react";
 import mapimg from "../assets/map.png";
 import { useNavigate } from "react-router-dom";
 import useStore from "../store/store";
+import { useEffect } from "react";
 
 const Container = styled.div`
   width: ${(props) => props.width};
@@ -221,8 +222,8 @@ function Item({ item }) {
 function ItemList({ item }) {
   return (
     <Itemdiv>
-      {item.map((item) => (
-        <Item item={item} key={item.index}></Item>
+      {item.goods.map((goods) => (
+        <Item item={goods} key={goods.id}></Item>
       ))}
     </Itemdiv>
   );
@@ -233,84 +234,40 @@ const CheckStockComponent = (props) => {
 
   const [location, setLocation] = useState([
     {
-      id: 0,
+      id: 1,
       name: "책장 1",
       IsClicked: true
     },
     {
-      id: 1,
+      id: 2,
       name: "책장 2",
       IsClicked: false
     },
     {
-      id: 2,
+      id: 52,
       name: "우산꽂이",
       IsClicked: false
     },
-    {
-      id: 3,
-      name: "서랍",
-      IsClicked: false
-    },
   ]);
-  const [items, setItems] = useState([
-    {
-      index: 1,
-      id: 123,
-      name: "검정 볼펜",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 2,
-      id: 456,
-      name: "샤프",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "쉽게 배우는 알고리즘",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 1011212,
-      name: "데이터 통신",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 6,
-      id: 101432112,
-      name: "머신러닝 기초",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101123412,
-      name: "객체지향 알아보기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 8,
-      id: 101444112,
-      name: "재밌는 데이터 구조",
-      returnDate: "2024-03-02",
-      category: "Book",
-    }
-  ]);
+
+  let url = 'http://192.168.0.146:8080/api/positions/';
+  let username = 'testman';
+  let password = '1234';
+  let headers = new Headers();
+  const fetchData = (id) => {
+    console.log(id)
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    const fetchDatas = async () => {
+      const response = await fetch(url + id, {
+        method: 'GET',
+        headers: headers,
+      });
+      const data = await response.json();
+      setLocationItemList(data);
+      console.log(data)
+    };
+    fetchDatas();
+  }
 
   const navigate = useNavigate();
   const GoToBorrow = () => {
@@ -319,12 +276,15 @@ const CheckStockComponent = (props) => {
 
   const BtnClicked = (clickedLocation) => {
     let locationCopy = location;
-    
+
     locationCopy[clickedLocation].IsClicked = True
   }
 
   const { itemdata, setItemdata } = useStore((state) => state);
 
+  const [locationItemList, setLocationItemList] = useState({ name: "",goods:[]});
+
+  
   return (
     <Container width="90%" height="90%" flexDirection="column" justifyContent="space-evenly" padding="10px" bgColor="#EDEDED">
       <Container width="90%" height="5%" flexDirection="row" justifyContent="flex-start" padding="10px">
@@ -333,17 +293,16 @@ const CheckStockComponent = (props) => {
       <MapContainer>
         <Container width="100%" height="100%" flexDirection="column" justifyContent="center" >
           <img src={mapimg} width="100%" height="100%"></img>
-          <MapBtn1></MapBtn1>
-          <MapBtn2></MapBtn2>
-          <MapBtn3></MapBtn3>
-          <MapBtn4></MapBtn4>
+          <MapBtn1 onClick={()=>{fetchData(1)}}></MapBtn1>
+          <MapBtn2 onClick={()=>{fetchData(2)}}></MapBtn2>
+          <MapBtn3 onClick={()=>{fetchData(52)}}></MapBtn3>
         </Container>
       </MapContainer>
       <Container width="92%" height="40%" flexDirection="row" justifyContent="center" >
         <BorrowBtn onClick={GoToBorrow}>빌리기</BorrowBtn>
         <StockListContainer>
-          <Title fontSize="30px" margin="0px 0px 10px 0px"> { location[1].name } </Title>
-          <ItemList item={itemdata} ></ItemList>
+          <Title fontSize="30px" margin="0px 0px 10px 0px"> { locationItemList.name } </Title>
+          <ItemList item={locationItemList} ></ItemList>
         </StockListContainer>
       </Container>
     </Container>

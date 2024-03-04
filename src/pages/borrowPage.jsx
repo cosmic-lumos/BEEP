@@ -296,9 +296,7 @@ function BorrowPage() {
     // console.log(data)
     // setItemdata(data);
   fetchData();
-
   GoToMain();
-
 };
 
 
