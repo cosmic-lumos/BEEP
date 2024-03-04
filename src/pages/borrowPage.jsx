@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import BorrowedItemListComponent from "../component/borrowedItemListComponent";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useStore from "../store/store";
 
 const BackGround = styled.div`
   width: 100vw;
@@ -12,7 +14,7 @@ const Container = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   align-items: center;
-  justify-content: center;
+  justify-content: ${(props) => props.justify_content};
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
 `;
@@ -24,6 +26,7 @@ const Header = styled.div`
   width: 20vw;
   height: 90px;
   margin-bottom: 20px;
+  cursor: pointer;
 `;
 
 const BorrowContainer = styled.div`
@@ -52,8 +55,8 @@ const BorrowContainerHeader = styled.div`
 const BorrowListContainer = styled.div`
   width: 100%;
   height: 100%;
-  align-items: center;
-  justify-content: start;
+  align-items: flex-start;
+  justify-content: flex-start;
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
 `;
@@ -143,7 +146,7 @@ function ItemLogo({ category }) {
   }
 
   switch (category) {
-    case "Pencil":
+    case "필기구":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +160,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Umbrella":
+    case "우산":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +174,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Book":
+    case "책":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -225,25 +228,13 @@ function BorrowPage() {
       name: "우산",
       category: "Umbrella",
     },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "데이터 통신",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 101112,
-      name: "데이터 구조",
-      category: "Book",
-    },
+
   ]);
+
+  const navigate = useNavigate();
+  const GoToMain = () => {
+    navigate("/main")
+  }
 
   const d = new Date();
 
@@ -253,57 +244,139 @@ function BorrowPage() {
   const year = d.getFullYear();
   const returnDate = new Date(new Date().setDate(day + 7)).toLocaleDateString();
 
-  return (
-    <BackGround>
-      <Container width="100vw" height="100vh" flexDirection="row">
-        {/* left container */}
-        <Container width="30%" height="100vh" flexDirection="column">
-          <Header>BEEP!</Header>
-          <BorrowedItemListComponent
-            width="20vw"
-            height="80vh"
-            visibility={false}
-          ></BorrowedItemListComponent>
-        </Container>
 
-        {/* right container */}
-        <Container width="70%" height="100vh">
-          <BorrowContainer width="90%" height="92%">
-            <BorrowContainerHeader>물품 대여하기</BorrowContainerHeader>
-            <Container width="95%" height="50%" flexDirection="column">
-              <BorrowListContainer>
-                <ItemList item={items}></ItemList>
-              </BorrowListContainer>
-            </Container>
-            <Container width="95%" height="20%" flexDirection="column">
-              <NoteContainer>
-                <Text size="30px">각서</Text>
-                <Text size="20px">
-                  물품 손상 혹은 분실 시 발생하는 모든 책임은 본인에게 있음에
-                  동의합니다.
-                </Text>
-                <Container>
-                  <NoteCheckBox type="checkbox"></NoteCheckBox>
-                  <Text>동의합니다.</Text>
-                </Container>
-              </NoteContainer>
-            </Container>
-            <Container width="95%" height="20%" flexDirection="row">
-              <BorrowSetContainer>
-                <BorrowTextBox>
-                  <Text size="25px">빌리는 물품 : {items.length}개</Text>
-                  <Text size="25px">반납 예정일 : {returnDate}일</Text>
-                </BorrowTextBox>
-                <BorrowButton>
-                  <BoldText size="35px">빌리기</BoldText>
-                </BorrowButton>
-              </BorrowSetContainer>
-            </Container>
-          </BorrowContainer>
-        </Container>
+
+  const [borrowItemList, setBorrowItemList] = useState([]);
+  const [itemid, setItemid] = useState('');
+  const onChange = (event) => {
+    setItemid(event.target.value);
+  }
+
+  const { itemdata, setItemdata } = useStore((state) => state);
+
+  let url = 'http://192.168.0.146:8080/api/users/rents';
+  let username = 'testman';
+  let password = '1234';
+
+  let headers = new Headers();
+
+  useEffect(() => {
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    const fetchData = async () => {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+        // credentials: 'user:passwd'
+      });
+      const data = await response.json();
+      setItemdata(data);
+    };
+    fetchData();
+  }, []);
+
+
+
+  let url3 = 'http://192.168.0.146:8080/api/rent/';
+  const realRent = (event) => {
+    event.preventDefault();
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    headers.set('Content-Type', 'application/json');
+    const fetchData = async () => {
+      console.log(itemid)
+      const response = borrowItemList.map(async(item) => (
+        await fetch(url3, {
+          method: 'POST',
+          headers: headers,
+          body: (JSON.stringify({ goodsId: Number(item.id) }))
+        })
+      ))
+    }
+    // const data = await response.json();
+    // setItemid("");
+    // console.log(data)
+    // setItemdata(data);
+  fetchData();
+
+  GoToMain();
+
+};
+
+
+let url2 = 'http://192.168.0.146:8080/api/goods/';
+const sendItemId = (event) => {
+  event.preventDefault();
+  headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+  const fetchData = async () => {
+    console.log(itemid)
+    const response = await fetch(url2 + Number(itemid), {
+      method: 'GET',
+      headers: headers,
+    });
+    const data = await response.json();
+    setItemid("");
+    setBorrowItemList([data, ...borrowItemList]);
+    console.log(borrowItemList);
+  };
+  fetchData();
+
+};
+
+
+
+return (
+  <BackGround>
+    <Container width="100vw" height="100vh" flexDirection="row">
+      {/* left container */}
+      <Container width="30%" height="100vh" flexDirection="column">
+        <Header onClick={GoToMain}>BEEP!</Header>
+        <BorrowedItemListComponent
+          width="20vw"
+          height="80vh"
+          visibility={false}
+        ></BorrowedItemListComponent>
       </Container>
-    </BackGround>
-  );
+
+      {/* right container */}
+      <Container width="70%" height="100vh">
+        <BorrowContainer width="90%" height="92%">
+          <BorrowContainerHeader>물품 대여하기</BorrowContainerHeader>
+          <form onSubmit={sendItemId} style={{opacity : '0%'}}>
+            <input type="number" autoFocus onChange={onChange} value={itemid} ></input>
+            <b>값: {itemid}</b>
+          </form>
+          <Container width="95%" height="50%" flexDirection="column" justify_content="flex-start">
+            <BorrowListContainer>
+              <ItemList item={borrowItemList}></ItemList>
+            </BorrowListContainer>
+          </Container>
+          <Container width="95%" height="20%" flexDirection="column">
+            <NoteContainer>
+              <Text size="30px">각서</Text>
+              <Text size="20px">
+                물품 손상 혹은 분실 시 발생하는 모든 책임은 본인에게 있음에 동의합니다.
+              </Text>
+              <Container>
+                <NoteCheckBox type="checkbox"></NoteCheckBox>
+                <Text>동의합니다.</Text>
+              </Container>
+            </NoteContainer>
+          </Container>
+          <Container width="95%" height="20%" flexDirection="row">
+            <BorrowSetContainer>
+              <BorrowTextBox>
+                <Text size="25px">빌리는 물품 : {items.length}개</Text>
+                <Text size="25px">반납 예정일 : {returnDate}일</Text>
+              </BorrowTextBox>
+              <BorrowButton onClick={realRent}>
+                <BoldText size="35px">빌리기</BoldText>
+              </BorrowButton>
+            </BorrowSetContainer>
+          </Container>
+        </BorrowContainer>
+      </Container>
+    </Container>
+  </BackGround>
+);
 }
 
 export default BorrowPage;

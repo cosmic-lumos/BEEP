@@ -3,6 +3,7 @@ import BorrowedItemListComponent from "../component/borrowedItemListComponent";
 import CheckStockComponent from "../component/checkStockComponent";
 import { useState, useEffect } from "react";
 import useStore from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: ${(props) => props.width};
@@ -33,14 +34,45 @@ const Header = styled.div`
 function MainPage() {
   const { itemdata, setItemdata } = useStore((state) => state);
 
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch("http://192.168.0.146:8080/api/goods/");
+  //     const data = await response.json();
+  //     setItemdata(data);
+  //   };
+  //   fetchData();
+  // }, []);
+
+
+  // let base64 = require('base-64');
+  let url = 'http://192.168.0.146:8080/api/goods/';
+  let username = 'testman';
+  let password = '1234';
+
+  let headers = new Headers();
+
   useEffect(() => {
+
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
     const fetchData = async () => {
-      const response = await fetch("http://192.168.0.146:8080/api/goods/");
+      const response = await fetch(url, {method:'GET',
+                                    headers: headers,
+                                    // credentials: 'user:passwd'
+     });
       const data = await response.json();
       setItemdata(data);
     };
     fetchData();
   }, []);
+//headers.append('Content-Type', 'text/json');
+// headers.append('Authorization', 'Basic' + base64.encode(username + ":" + password));
+// fetch(url, {method:'GET',
+//         headers: headers,
+//         credentials: 'user:passwd'
+//        })
+// .then(response => response.json())
+// .then(json => console.log(json));
 
   return (
     // main Container
