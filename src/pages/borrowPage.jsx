@@ -320,6 +320,8 @@ const sendItemId = (event) => {
 };
 
 
+const [btnactive,setBtnActive] =useState(false);
+
 
 return (
   <BackGround>
@@ -362,7 +364,7 @@ return (
           <Container width="95%" height="20%" flexDirection="row">
             <BorrowSetContainer>
               <BorrowTextBox>
-                <Text size="25px">빌리는 물품 : {items.length}개</Text>
+                <Text size="25px">빌리는 물품 : {borrowItemList.length}개</Text>
                 <Text size="25px">반납 예정일 : {returnDate}일</Text>
               </BorrowTextBox>
               <BorrowButton onClick={realRent}>
