@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,5 +21,5 @@ public class Positions {
     private Long id;
     private String name;
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "positions")
-    private List<Goods> goods;
+    private List<Goods> goods = new ArrayList<>();
 }
