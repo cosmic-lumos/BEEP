@@ -2,6 +2,9 @@ import styled from "styled-components";
 import "../index.css";
 import { useState } from "react";
 import mapimg from "../assets/map.png";
+import { useNavigate } from "react-router-dom";
+import useStore from "../store/store";
+import { useEffect } from "react";
 
 const Container = styled.div`
   width: ${(props) => props.width};
@@ -76,9 +79,9 @@ const MapBtn3 = styled(MapBtn)`
 
 const MapBtn4 = styled(MapBtn)`
   width: 11.2%;
-  height: 13.9%;
+  height: 13.3%;
   left: 53.7%;
-  top: 0%;
+  top: 0.8%;
 `;
 
 const BorrowBtn = styled.div`
@@ -94,6 +97,7 @@ const BorrowBtn = styled.div`
   align-items: center;
   font-size: 50px;
   transition-duration: .3s;
+  cursor: pointer;
 
   &:hover {
     transition-duration: .3s;
@@ -153,14 +157,13 @@ const Itemdiv = styled.div`
 
 function ItemLogo({ category }) {
   let logoSvg;
-  console.log(logoSvg);
 
   if (!category) {
     return null; // 또는 다른 처리 로직 추가
   }
 
   switch (category) {
-    case "Pencil":
+    case "필기구":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +177,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Umbrella":
+    case "우산":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +191,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Book":
+    case "책":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -219,8 +222,8 @@ function Item({ item }) {
 function ItemList({ item }) {
   return (
     <Itemdiv>
-      {item.map((item) => (
-        <Item item={item} key={item.index}></Item>
+      {item.goods.map((goods) => (
+        <Item item={goods} key={goods.id}></Item>
       ))}
     </Itemdiv>
   );
@@ -231,402 +234,75 @@ const CheckStockComponent = (props) => {
 
   const [location, setLocation] = useState([
     {
-      id: 111,
-      name: "책장 1"
+      id: 1,
+      name: "책장 1",
+      IsClicked: true
     },
     {
-      id: 222,
-      name: "책장 2"
+      id: 2,
+      name: "책장 2",
+      IsClicked: false
     },
     {
-      id: 333,
-      name: "우산꽂이"
-    },
-    {
-      id: 444,
-      name: "서랍"
-    },
-  ]);
-  const [items, setItems] = useState([
-    {
-      index: 1,
-      id: 123,
-      name: "검정 볼펜",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 2,
-      id: 456,
-      name: "샤프",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "쉽게 배우는 알고리즘",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 101112,
-      name: "데이터 통신",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 6,
-      id: 101112,
-      name: "머신러닝 기초",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "객체지향 알아보기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "재밌는 데이터 구조",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "선형대수",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "파이썬 마스터",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "C++ 찢어버리기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 2,
-      id: 456,
-      name: "샤프",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "쉽게 배우는 알고리즘",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 101112,
-      name: "데이터 통신",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 6,
-      id: 101112,
-      name: "머신러닝 기초",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "객체지향 알아보기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "재밌는 데이터 구조",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "선형대수",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "파이썬 마스터",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "C++ 찢어버리기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 2,
-      id: 456,
-      name: "샤프",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "쉽게 배우는 알고리즘",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 101112,
-      name: "데이터 통신",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 6,
-      id: 101112,
-      name: "머신러닝 기초",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "객체지향 알아보기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "재밌는 데이터 구조",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "선형대수",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "파이썬 마스터",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "C++ 찢어버리기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 2,
-      id: 456,
-      name: "샤프",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "쉽게 배우는 알고리즘",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 101112,
-      name: "데이터 통신",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 6,
-      id: 101112,
-      name: "머신러닝 기초",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "객체지향 알아보기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "재밌는 데이터 구조",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "선형대수",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "파이썬 마스터",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "C++ 찢어버리기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 2,
-      id: 456,
-      name: "샤프",
-      returnDate: "2024-03-02",
-      category: "Pencil",
-    },
-    {
-      index: 3,
-      id: 789,
-      name: "컴퓨터 네트워크",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 4,
-      id: 101112,
-      name: "쉽게 배우는 알고리즘",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 5,
-      id: 101112,
-      name: "데이터 통신",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 6,
-      id: 101112,
-      name: "머신러닝 기초",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "객체지향 알아보기",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "재밌는 데이터 구조",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "선형대수",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "파이썬 마스터",
-      returnDate: "2024-03-02",
-      category: "Book",
-    },
-    {
-      index: 7,
-      id: 101112,
-      name: "C++ 찢어버리기",
-      returnDate: "2024-03-02",
-      category: "Book",
+      id: 52,
+      name: "우산꽂이",
+      IsClicked: false
     },
   ]);
 
+  let url = 'http://192.168.0.146:8080/api/positions/';
+  let username = 'testman';
+  let password = '1234';
+  let headers = new Headers();
+  const fetchData = (id) => {
+    console.log(id)
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    const fetchDatas = async () => {
+      const response = await fetch(url + id, {
+        method: 'GET',
+        headers: headers,
+      });
+      const data = await response.json();
+      setLocationItemList(data);
+      console.log(data)
+    };
+    fetchDatas();
+  }
 
+  const navigate = useNavigate();
+  const GoToBorrow = () => {
+    navigate("/borrow")
+  }
+
+  const BtnClicked = (clickedLocation) => {
+    let locationCopy = location;
+
+    locationCopy[clickedLocation].IsClicked = True
+  }
+
+  const { itemdata, setItemdata } = useStore((state) => state);
+
+  const [locationItemList, setLocationItemList] = useState({ name: "",goods:[]});
+
+  
   return (
-    <Container width="90%" height="90%" flexDirection="column" justifycontent="center" margin="0px" padding="10px" bgColor="#EDEDED">
-      <Container width="90%" height="10%" flexDirection="row" justifyContent="flex-start" margin="0px" padding="10px">
+    <Container width="90%" height="90%" flexDirection="column" justifyContent="space-evenly" padding="10px" bgColor="#EDEDED">
+      <Container width="90%" height="5%" flexDirection="row" justifyContent="flex-start" padding="10px">
         <Title fontSize="45px" margin="0px"> 대여 현황 확인 </Title>
       </Container>
       <MapContainer>
-        <Container width="100%" height="100%" flexDirection="column" justifycontent="center" margin="0px" padding="0px">
+        <Container width="100%" height="100%" flexDirection="column" justifyContent="center" >
           <img src={mapimg} width="100%" height="100%"></img>
-          <MapBtn1></MapBtn1>
-          <MapBtn2></MapBtn2>
-          <MapBtn3></MapBtn3>
-          <MapBtn4></MapBtn4>
+          <MapBtn1 onClick={()=>{fetchData(1)}}></MapBtn1>
+          <MapBtn2 onClick={()=>{fetchData(2)}}></MapBtn2>
+          <MapBtn3 onClick={()=>{fetchData(52)}}></MapBtn3>
         </Container>
       </MapContainer>
-      <Container width="92%" height="40%" flexDirection="row" justifyContent="center" margin="0px 0px 0px 0px" padding="0px">
-        <BorrowBtn>빌리기</BorrowBtn>
+      <Container width="92%" height="40%" flexDirection="row" justifyContent="center" >
+        <BorrowBtn onClick={GoToBorrow}>빌리기</BorrowBtn>
         <StockListContainer>
-          <Title fontSize="30px" margin="0px 0px 10px 0px"> { location[1].name } </Title>
-          <ItemList item={items} ></ItemList>
+          <Title fontSize="30px" margin="0px 0px 10px 0px"> { locationItemList.name } </Title>
+          <ItemList item={locationItemList} ></ItemList>
         </StockListContainer>
       </Container>
     </Container>

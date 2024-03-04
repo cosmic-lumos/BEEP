@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ListContainer = styled.div`
   width: ${(props) => props.width};
@@ -115,7 +116,7 @@ function ItemLogo({ category }) {
   }
 
   switch (category) {
-    case "Pencil":
+    case "필기구":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +130,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Umbrella":
+    case "우산":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +144,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Book":
+    case "책":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -216,19 +217,47 @@ const BorrowedItemListComponent = (props) => {
     },
   ]);
 
+  const navigate = useNavigate();
+  const GoToRetuen = () => {
+    navigate("/return")
+  }
+  const GoToMyPage = () => {
+    navigate("/mypage")
+  }
+
+  const [myRentedItemList,setMyRentedItemList] = useState([]);
+  let url = 'http://192.168.0.146:8080/api/users/rents';
+  let username = 'testman';
+  let password = '1234';
+
+  let headers = new Headers();
+
+  useEffect(() => {
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    const fetchData = async () => {
+      const response = await fetch(url, {method:'GET',
+                                    headers: headers,
+                                    // credentials: 'user:passwd'
+     });
+      const data = await response.json();
+      setMyRentedItemList(data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <ListContainer width={props.width} height={props.height}>
       <ItemListHeder>내가 빌린 항목</ItemListHeder>
       <BorrowedItemListContainer>
-        <ItemList item={items}></ItemList>
+        <ItemList item={myRentedItemList}></ItemList>
       </BorrowedItemListContainer>
       <ItemListButtonSet
         justify={props.visiability === true ? "space-evenly" : "end"}
         margin={props.visiability === true ? "0px" : "20px"}
       >
-        <MyPageButton>My Page</MyPageButton>
+        <MyPageButton onClick={GoToMyPage}>My Page</MyPageButton>
         {props.visiability === true ? (
-          <ReturnItemButton>반납하기</ReturnItemButton>
+          <ReturnItemButton onClick={GoToRetuen}>반납하기</ReturnItemButton>
         ) : null}
       </ItemListButtonSet>
     </ListContainer>

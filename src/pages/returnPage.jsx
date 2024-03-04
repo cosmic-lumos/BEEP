@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import BorrowedItemListComponent from "../component/borrowedItemListComponent";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BackGround = styled.div`
   width: 100vw;
@@ -24,6 +25,7 @@ const Header = styled.div`
   width: 20vw;
   height: 90px;
   margin-bottom: 20px;
+  cursor: pointer;
 `;
 
 const BorrowContainer = styled.div`
@@ -52,8 +54,8 @@ const BorrowContainerHeader = styled.div`
 const BorrowListContainer = styled.div`
   width: 100%;
   height: 100%;
-  align-items: center;
-  justify-content: start;
+  align-items: flex-start;
+  justify-content: flex-start;
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
 `;
@@ -151,7 +153,7 @@ function ItemLogo({ category }) {
   }
 
   switch (category) {
-    case "Pencil":
+    case "필기구":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +167,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Umbrella":
+    case "우산":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +181,7 @@ function ItemLogo({ category }) {
         </svg>
       );
       break;
-    case "Book":
+    case "책":
       logoSvg = (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -267,12 +269,85 @@ function ReturnPage() {
   const year = d.getFullYear();
   const returnDate = new Date(new Date().setDate(day + 7)).toLocaleDateString();
 
+  const navigate = useNavigate();
+  const GoToMain = () => {
+    navigate("/main")
+  }
+
+
+  const [borrowItemList, setBorrowItemList] = useState([]);
+  const [itemid, setItemid] = useState('');
+  const onChange = (event) => {
+    setItemid(event.target.value);
+  }
+
+
+  let url = 'http://192.168.0.146:8080/api/users/rents';
+  let username = 'testman';
+  let password = '1234';
+  let headers = new Headers();
+
+  useEffect(() => {
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    const fetchData = async () => {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+        // credentials: 'user:passwd'
+      });
+      const data = await response.json();
+      setItemdata(data);
+    };
+    fetchData();
+  }, []);
+
+  let url2 = 'http://192.168.0.146:8080/api/goods/';
+  const sendItemId = (event) => {
+  event.preventDefault();
+  headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+  const fetchData = async () => {
+    console.log(itemid)
+    const response = await fetch(url2 + Number(itemid), {
+      method: 'GET',
+      headers: headers,
+    });
+    const data = await response.json();
+    setItemid("");
+    setBorrowItemList([data, ...borrowItemList]);
+    console.log(borrowItemList);
+  };
+  fetchData();
+
+};
+
+let url3 = 'http://192.168.0.146:8080/api/rent/';
+const realRent = (event) => {
+  event.preventDefault();
+  headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+  headers.set('Content-Type', 'application/json');
+  const fetchData = async () => {
+    console.log(itemid)
+    const response = borrowItemList.map(async(item) => (
+      await fetch(url3 + Number(item.id) , {
+        method: 'DELETE',
+        headers: headers,
+      })
+    ))
+  }
+  // const data = await response.json();
+  // setItemid("");
+  // console.log(data)
+  // setItemdata(data);
+fetchData();
+GoToMain();
+};
+
   return (
     <BackGround>
       <Container width="100vw" height="100vh" flexDirection="row">
         {/* left container */}
         <Container width="30%" height="100vh" flexDirection="column">
-          <Header>BEEP!</Header>
+          <Header onClick={GoToMain}>BEEP!</Header>
           <BorrowedItemListComponent
             width="20vw"
             height="80vh"
@@ -284,9 +359,13 @@ function ReturnPage() {
         <Container width="70%" height="100vh">
           <BorrowContainer width="90%" height="92%">
             <BorrowContainerHeader>물품 반납하기</BorrowContainerHeader>
+            <form onSubmit={sendItemId} style={{opacity : '0%'}}>
+              <input type="number" autoFocus onChange={onChange} value={itemid} ></input>
+              <b>값: {itemid}</b>
+            </form>
             <Container width="95%" height="50%" flexDirection="column">
               <BorrowListContainer>
-                <ItemList item={items}></ItemList>
+                <ItemList item={borrowItemList}></ItemList>
               </BorrowListContainer>
             </Container>
             <Container width="95%" height="20%" flexDirection="column">
@@ -305,10 +384,10 @@ function ReturnPage() {
             <Container width="95%" height="20%" flexDirection="row">
               <BorrowSetContainer>
                 <BorrowTextBox>
-                  <Text size="25px">반납하는 물품 : {items.length}개</Text>
+                  <Text size="25px">반납하는 물품 : {borrowItemList.length}개</Text>
                 </BorrowTextBox>
                 <BorrowButton>
-                  <BoldText size="35px">반납하기</BoldText>
+                  <BoldText size="35px" onClick={realRent}>반납하기</BoldText>
                 </BorrowButton>
               </BorrowSetContainer>
             </Container>

@@ -4,6 +4,7 @@ import MainPage from "./pages/mainPage";
 import LoginPage from "./pages/loginPage";
 import BorrowPage from "./pages/borrowPage";
 import ReturnPage from "./pages/returnPage";
+import MyPage from "./pages/myPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/borrow" element={<BorrowPage />} />
         <Route path="/return" element={<ReturnPage />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );

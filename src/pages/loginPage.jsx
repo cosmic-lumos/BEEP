@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -111,6 +112,10 @@ const PwInitButton = styled.button`
 `;
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const GoToMain = () => {
+    navigate("/main")
+  }
   return (
     <Container>
       <HeaderContainer>
@@ -125,7 +130,7 @@ function LoginPage() {
               <LoginInputText>PW</LoginInputText>
               <LoginInput type="text" placeholder="비밀번호"></LoginInput>
             </LoginInputBox>
-            <LoginButton>로그인</LoginButton>
+            <LoginButton onClick={GoToMain}>로그인</LoginButton>
           </LoginInnerBox>
         </LoginBox>
       </LoginContainer>
