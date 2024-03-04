@@ -5,6 +5,7 @@ import com.cosmic.beep.entities.Rented;
 import com.cosmic.beep.entities.User;
 import com.cosmic.beep.exceptions.MaximumRented;
 import com.cosmic.beep.exceptions.ResourceNotFound;
+import com.cosmic.beep.exceptions.SignUpException;
 import com.cosmic.beep.repositories.GoodsRepository;
 import com.cosmic.beep.repositories.RentRepository;
 import com.cosmic.beep.repositories.RentedRepository;
@@ -37,6 +38,9 @@ public class RentService {
 
     public List<Rent> rentGoods(UserDetails userDetails, Long goodsId){
         User user = userRepository.findByUsernameOrEmail(userDetails.getUsername(), userDetails.getUsername()).orElseThrow(()->new ResourceNotFound(0L));
+        if(rentRepository.findByGoodsId(goodsId).isPresent()){
+            throw new SignUpException("이미 빌린 물품입니다.");
+        }
         if(rentRepository.findByUser(user).size() >= 5){
             throw new MaximumRented();
         }

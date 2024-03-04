@@ -6,10 +6,13 @@ import com.cosmic.beep.entities.User;
 import com.cosmic.beep.exceptions.ResourceNotFound;
 import com.cosmic.beep.repositories.RentRepository;
 import com.cosmic.beep.repositories.UserRepository;
+import com.cosmic.beep.services.RentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +28,9 @@ public class UserController {
 
     @Autowired
     private RentRepository rentRepository;
+
+    @Autowired
+    private RentService rentService;
 
     @GetMapping("/")
     public List<User> all() {
@@ -45,4 +51,11 @@ public class UserController {
         return user.map(value -> rentRepository.findByUser(value).stream().map(RentGoodsDto::of).toList()).orElse(null);
     }
 
+    @Operation(
+            summary = "자기가 빌린 물품들을 가져옵니다."
+    )
+    @GetMapping("/rents")
+    public List<RentGoodsDto> myRents(@AuthenticationPrincipal UserDetails userDetails){
+        return rentService.getRentedOfUser(userDetails).stream().map(RentGoodsDto::of).toList();
+    }
 }
