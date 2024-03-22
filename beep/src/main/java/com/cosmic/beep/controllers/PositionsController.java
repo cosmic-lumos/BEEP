@@ -46,4 +46,13 @@ public class PositionsController {
         return PositionDto.of(goodsService.getPosition(id));
     }
 
+    @Operation(
+            summary = "특정 위치를 제거합니다.",
+            description = "id에 해당하는 위치를 제거합니다. 연결된 물건들의 위치도 모두 삭제됩니다."
+    )
+    @DeleteMapping("/{id}")
+    public String deletePosition(@PathVariable Long id) {
+        goodsService.deletePosition(id);
+        return "성공적으로 삭제되었습니다.";
+    }
 }
