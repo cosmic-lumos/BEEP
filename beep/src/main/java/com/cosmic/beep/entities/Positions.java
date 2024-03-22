@@ -20,6 +20,6 @@ public class Positions {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "positions")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "positions", cascade = CascadeType.ALL)
     private List<Goods> goods = new ArrayList<>();
 }

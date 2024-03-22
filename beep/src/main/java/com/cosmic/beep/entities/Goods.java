@@ -1,13 +1,10 @@
 package com.cosmic.beep.entities;
 
-import com.cosmic.beep.dtos.GoodsCreateDto;
-import com.cosmic.beep.repositories.PositionRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +21,7 @@ public class Goods {
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="positions_id")
     private Positions positions;
 }
