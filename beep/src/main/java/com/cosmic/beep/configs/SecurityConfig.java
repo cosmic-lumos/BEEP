@@ -3,6 +3,7 @@ package com.cosmic.beep.configs;
 import com.cosmic.beep.services.MyUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,8 +48,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authRequest) -> {
                   authRequest
                           .requestMatchers("/api/auth/**").permitAll()
-                          .requestMatchers("/api/**").authenticated()
-                          .anyRequest().permitAll();
+                          .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                          .requestMatchers("/api/rent/**").authenticated()
+                          .anyRequest().hasRole("ADMIN");
                 })
                 .httpBasic(withDefaults())
                 ;
