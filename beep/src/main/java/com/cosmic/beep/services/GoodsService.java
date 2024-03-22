@@ -79,4 +79,11 @@ public class GoodsService {
     public Category getCategory(Long id){
         return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFound(id));
     }
+
+    public void deletePosition(Long id) {
+        if(!positionRepository.existsById(id)){
+            throw new ResourceNotFound(id);
+        }
+        positionRepository.deleteById(id);
+    }
 }
